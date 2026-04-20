@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Sagunto.API/Sagunto.API.csproj" Id="276c850d-ef62-4d2b-ba0c-64951f8b1d44" />
+  <Project Path="Sagunto.Application/Sagunto.Application.csproj" Id="76e4ab8b-25ff-47e0-bce4-66b1f18be60b" />
+  <Project Path="Sagunto.Domain/Sagunto.Domain.csproj" Id="0a07509f-ee7f-47ea-8509-c0d18ab28cf5" />
+  <Project Path="Sagunto.Infrastructure/Sagunto.Infrastructure.csproj" Id="6fd1cabb-eaaa-42a7-93de-57cff3be08bf" />
+  <Project Path="Sagunto.Tests/Sagunto.Tests.csproj" Id="068f3370-43f3-4f09-ad66-91af9023e44c" />
+</Solution>
