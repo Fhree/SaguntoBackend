@@ -1,4 +1,5 @@
-﻿using Sagunto.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
+using Sagunto.Application.Interfaces;
 using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
@@ -7,6 +8,8 @@ namespace Sagunto.Application.Features.Orders
     public static class PayOrderCommandHandler
     {
         [WolverinePut("/api/orders/{OrderId}/pay")]
+        [Tags("Orders")]
+        [EndpointSummary("Pay one order")]
         public static async Task<AcceptResponse?> Handle(PayOrderCommand command, ISaguntoDbContext dbContext)
         {
             var order = await dbContext.Orders.FindAsync(command.OrderId);

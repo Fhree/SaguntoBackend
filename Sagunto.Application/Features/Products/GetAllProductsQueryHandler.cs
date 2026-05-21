@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Sagunto.Application.Interfaces;
 using Wolverine.Http;
 
@@ -11,6 +12,8 @@ namespace Sagunto.Application.Features.Products
     public static class GetAllProductsQueryHandler
     {
         [WolverineGet("/api/products")]
+        [Tags("Products")]
+        [EndpointSummary("Get all products")]
         public static async Task<List<ProductDto>> Handle(ISaguntoDbContext dbContext)
         {
             var products = await dbContext.Products.AsNoTracking().ToListAsync();

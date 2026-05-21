@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Sagunto.Application.Interfaces;
 using Wolverine.Http;
 
@@ -9,6 +10,8 @@ namespace Sagunto.Application.Features.Users
     public static class GetUserBySaguntinoCodeQueryHandler
     {
         [WolverineGet("/api/users/{saguntinoCode}")]
+        [Tags("Users")]
+        [EndpointSummary("Get user by saguntino code")]
         public static async Task<UserBySaguntinoCodeResponseDto?> Handle(string saguntinoCode, ISaguntoDbContext dbContext)
         {
             var user = await dbContext.Users.Include(u => u.Role).AsNoTracking().FirstOrDefaultAsync(u => u.SaguntinoCode == saguntinoCode);

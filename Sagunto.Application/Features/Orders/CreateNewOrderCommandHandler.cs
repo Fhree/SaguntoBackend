@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Sagunto.Application.Interfaces;
 using Sagunto.Domain.Entities;
@@ -11,6 +12,8 @@ namespace Sagunto.Application.Features.Orders
     public static class CreateNewOrderCommandHandler
     {
         [WolverinePost("/api/orders")]
+        [Tags("Orders")]
+        [EndpointSummary("Create new order")]
         public static async Task<CreationResponse> Handle(CreateNewOrderCommand command, ISaguntoDbContext dbContext)
         {
             var order = new Order(command.IsPaid, command.UserId, command.CustomerId);

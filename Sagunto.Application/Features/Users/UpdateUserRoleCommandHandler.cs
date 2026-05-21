@@ -1,5 +1,6 @@
-﻿using Sagunto.Application.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Sagunto.Application.Interfaces;
 using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Users
@@ -9,6 +10,8 @@ namespace Sagunto.Application.Features.Users
     public static class UpdateUserRoleCommandHandler
     {
         [WolverinePut("api/users/updateRol")]
+        [Tags("Users")]
+        [EndpointSummary("Update member rol")]
         public static async Task<AcceptResponse?> Handle(UpdateUserRoleCommand command, ISaguntoDbContext dbContext)
         {
             var user = await dbContext.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == command.UserId);

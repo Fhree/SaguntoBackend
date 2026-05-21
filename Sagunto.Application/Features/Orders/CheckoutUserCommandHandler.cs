@@ -1,19 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Sagunto.Application.Interfaces;
 using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-
+    public record CheckoutUserCommand(int CustomerId, List<int> OrderIds);
 
     public static class CheckoutUserCommandHandler
     {
-        [WolverinePut("/api/orders/{customerId}/pay")]
-        public static void Handle()
+        [WolverinePut("/api/orders/checkout")]
+        [Tags("Orders")]
+        [EndpointSummary("Checkout User bills")]
+        public static async Task<AcceptResponse?> Handle(CheckoutUserCommand command, ISaguntoDbContext dbContext)
         {
-            // Implement the logic for checking out a user here
-            // This could involve validating the user's order, processing payment, etc.
+            var billsToCheckout = await dbContext.Orders.Where(o => command.OrderIds.Contains(o.Id) && o.UserId == command.CustomerId).ToListAsync();
+
+            billsToCheckout.ForEach(bill => bill.Pay());
+
+            await dbContext.SaveChangesAsync();
+            return new AcceptResponse($"/api/orders/{command.CustomerId}/checkout");
         }
     }
 }
