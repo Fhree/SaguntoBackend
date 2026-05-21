@@ -6,27 +6,32 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-    public record CreateNewOrderCommand(decimal Total, bool IsPaid, int UserId, int? CustomerId, Dictionary<int, int> Products);
+    public record CreateNewOrderCommand(bool IsPaid, int UserId, int? CustomerId, Dictionary<int, int> Products);
 
     public static class CreateNewOrderCommandHandler
     {
         [WolverinePost("/api/orders")]
         public static async Task<CreationResponse> Handle(CreateNewOrderCommand command, ISaguntoDbContext dbContext)
         {
-            var order = new Order(command.Total, command.IsPaid, command.UserId, command.CustomerId);
+            var order = new Order(command.IsPaid, command.UserId, command.CustomerId);
 
             dbContext.Orders.Add(order);
-            await dbContext.SaveChangesAsync();
-
+            
             var productsInLines = await dbContext.Products.AsNoTracking()
                 .Where(p => command.Products.Keys.Contains(p.Id))
                 .ToListAsync();
 
+            var totalPrice = 0m;
             productsInLines.ForEach(p =>
             {
                 var price = order.CustomerId.HasValue ? p.PriceMember : p.PriceGuest;
-                order.AddLine(new OrderLine(order.Id, p.Id, command.Products[p.Id], price));
+                var quantity = command.Products[p.Id];
+
+                totalPrice += (price * quantity);
+                order.AddLine(new OrderLine(order.Id, p.Id, quantity, price));
             });
+
+            order.SetTotalPrice(totalPrice);
 
             await dbContext.SaveChangesAsync();
 

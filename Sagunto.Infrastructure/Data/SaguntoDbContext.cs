@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sagunto.Application.Interfaces;
 using Sagunto.Domain.Entities;
 
 namespace Sagunto.Infrastructure.Data
 {
-    public class SaguntoDbContext: DbContext
+    public class SaguntoDbContext: DbContext, ISaguntoDbContext
     {
         public SaguntoDbContext(DbContextOptions<SaguntoDbContext> options) : base(options)
         {

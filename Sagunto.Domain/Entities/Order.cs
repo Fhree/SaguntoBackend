@@ -11,10 +11,9 @@
         public User? User { get; private set; }
         public ICollection<OrderLine> Lines { get; private set; }
 
-        public Order(decimal total, bool isPaid, int userId, int? customerId) 
+        public Order(bool isPaid, int userId, int? customerId) 
         { 
             CreatedAt = DateTime.UtcNow;
-            Total = total;
             IsPaid = isPaid;
             UserId = userId;
             CustomerId = customerId;
@@ -27,6 +26,13 @@
 
             Lines.Add(line);
             Total += line.PriceSnapshot;
+        }
+
+        public void SetTotalPrice(decimal total) 
+        {
+            if (total < 0)
+                throw new ArgumentException("Total cannot be negative.", nameof(total));
+            Total = total;
         }
 
         public void Pay() 
