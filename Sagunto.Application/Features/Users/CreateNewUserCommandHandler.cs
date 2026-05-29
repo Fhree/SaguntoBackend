@@ -2,12 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Sagunto.Application.Interfaces;
 using Sagunto.Domain.Entities;
-using System.Xml.Linq;
 using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Users
 {
-    public record CreateNewUserCommand(string Name, string Surname, string SaguntinoCode, int RoleId);
+    public record CreateNewUserCommand(string Name, string Surname, int RoleId);
 
     public record CreateNewUserResponse(int UserId);
 
