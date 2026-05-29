@@ -11,6 +11,8 @@
         public User? User { get; private set; }
         public ICollection<OrderLine> Lines { get; private set; }
 
+        private Order() { }
+
         public Order(bool isPaid, int userId, int? customerId) 
         { 
             CreatedAt = DateTime.UtcNow;
