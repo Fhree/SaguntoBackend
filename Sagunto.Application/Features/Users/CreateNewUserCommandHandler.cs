@@ -8,14 +8,14 @@ namespace Sagunto.Application.Features.Users
 {
     public record CreateNewUserCommand(string Name, string Surname, int RoleId);
 
-    public record CreateNewUserResponse(int UserId);
+    public record CreateNewUserResponse(string Name, string Surname, string SaguntinoCode, int RoleId);
 
     public static class CreateNewUserCommandHandler
     {
         [WolverinePost("/api/users")]
         [Tags("Users")]
         [EndpointSummary("Create new user")]
-        public static async Task<(CreationResponse, CreateNewUserResponse)> Handle(CreateNewUserCommand command, ISaguntoDbContext dbContext, CancellationToken cancellationToken)
+        public static async Task<IResult> Handle(CreateNewUserCommand command, ISaguntoDbContext dbContext, CancellationToken cancellationToken)
         {
             string saguntinoCode;
             bool codeExists;
@@ -32,10 +32,7 @@ namespace Sagunto.Application.Features.Users
             dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync();
 
-            return (
-                new CreationResponse($"/api/users/{user.Id}"),
-                new CreateNewUserResponse(user.Id)
-            );
+            return TypedResults.Created($"/api/users", new CreateNewUserResponse(user.Name, user.Surname, user.SaguntinoCode, user.RoleId));
         }
 
         private static string GenerateSaguntinoCode()
