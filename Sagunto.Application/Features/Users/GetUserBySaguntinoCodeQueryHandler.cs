@@ -5,11 +5,11 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Users
 {
-    public record UserBySaguntinoCodeResponseDto(int Id, string Name, string SaguntinoCode, string Role);
+    public record UserBySaguntinoCodeResponseDto(int Id, string Name, string SaguntinoCode);
 
     public static class GetUserBySaguntinoCodeQueryHandler
     {
-        [WolverineGet("/api/users/{saguntinoCode}")]
+        [WolverineGet("/api/users/saguntino_code/{saguntinoCode}")]
         [Tags("Users")]
         [EndpointSummary("Get user by saguntino code")]
         public static async Task<UserBySaguntinoCodeResponseDto?> Handle(string saguntinoCode, ISaguntoDbContext dbContext)
@@ -19,7 +19,7 @@ namespace Sagunto.Application.Features.Users
             if (user == null)
                 return null;
             else
-                return new UserBySaguntinoCodeResponseDto(user.Id, user.Name, user.SaguntinoCode, user.Role?.Name ?? "No role");
+                return new UserBySaguntinoCodeResponseDto(user.Id, user.Name, user.SaguntinoCode);
         }
     }
 }

@@ -7,7 +7,8 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-    public record CreateNewOrderCommand(bool IsPaid, int UserId, int? CustomerId, Dictionary<int, int> Products);
+    public record CreateNewOrderCommand(bool IsPaid, int UserId, int? CustomerId, List<OrderLineCommand> Products);
+    public record OrderLineCommand(int ProductId, int Quantity, decimal PriceSnapshot);
 
     public static class CreateNewOrderCommandHandler
     {
@@ -21,14 +22,14 @@ namespace Sagunto.Application.Features.Orders
             dbContext.Orders.Add(order);
             
             var productsInLines = await dbContext.Products.AsNoTracking()
-                .Where(p => command.Products.Keys.Contains(p.Id))
+                .Where(p => command.Products.Any(ol => ol.ProductId == p.Id))
                 .ToListAsync();
 
             var totalPrice = 0m;
             productsInLines.ForEach(p =>
             {
-                var price = order.CustomerId.HasValue ? p.PriceMember : p.PriceGuest;
-                var quantity = command.Products[p.Id];
+                var price = command.Products.First(ol => ol.ProductId == p.Id).PriceSnapshot;
+                var quantity = command.Products.First(ol => ol.ProductId == p.Id).Quantity;
 
                 totalPrice += (price * quantity);
                 order.AddLine(new OrderLine(order.Id, p.Id, quantity, price));

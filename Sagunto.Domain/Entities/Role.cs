@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
 
-        private Role() { }
+        public Role() { }
 
         public Role(string name) 
         { 

@@ -8,7 +8,7 @@ namespace Sagunto.Application.Features.Users
 {
     public record CreateNewUserCommand(string Name, string Surname, int RoleId);
 
-    public record CreateNewUserResponse(string Name, string Surname, string SaguntinoCode, int RoleId);
+    public record CreateNewUserResponse(int Id, string Name, string Surname, string SaguntinoCode, int RoleId);
 
     public static class CreateNewUserCommandHandler
     {
@@ -27,12 +27,12 @@ namespace Sagunto.Application.Features.Users
 
             } while (codeExists);
 
-            var user = new User(command.Name, command.RoleId, saguntinoCode, command.Surname);
+            var user = new User(command.Name.Trim(), command.RoleId, saguntinoCode.Trim(), command.Surname.Trim());
 
             dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync();
 
-            return TypedResults.Created($"/api/users", new CreateNewUserResponse(user.Name, user.Surname, user.SaguntinoCode, user.RoleId));
+            return TypedResults.Created($"/api/users", new CreateNewUserResponse(user.Id, user.Name, user.Surname, user.SaguntinoCode, user.RoleId));
         }
 
         private static string GenerateSaguntinoCode()
