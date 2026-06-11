@@ -5,7 +5,7 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Users
 {
-    public record UserBySaguntinoCodeResponseDto(int Id, string Name, string SaguntinoCode);
+    public record UserBySaguntinoCodeResponseDto(int Id, string Name, string Surname, string SaguntinoCode);
 
     public static class GetUserBySaguntinoCodeQueryHandler
     {
@@ -19,7 +19,7 @@ namespace Sagunto.Application.Features.Users
             if (user == null)
                 return null;
             else
-                return new UserBySaguntinoCodeResponseDto(user.Id, user.Name, user.SaguntinoCode);
+                return new UserBySaguntinoCodeResponseDto(user.Id, user.Name, user.Surname, user.SaguntinoCode);
         }
     }
 }

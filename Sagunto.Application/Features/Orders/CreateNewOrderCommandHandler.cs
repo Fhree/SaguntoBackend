@@ -20,20 +20,26 @@ namespace Sagunto.Application.Features.Orders
             var order = new Order(command.IsPaid, command.UserId, command.CustomerId);
 
             dbContext.Orders.Add(order);
-            
+
+            var productIds = command.Products.Select(ol => ol.ProductId).ToList();
+
+
             var productsInLines = await dbContext.Products.AsNoTracking()
-                .Where(p => command.Products.Any(ol => ol.ProductId == p.Id))
+                .Where(p => productIds.Contains(p.Id))
                 .ToListAsync();
 
             var totalPrice = 0m;
-            productsInLines.ForEach(p =>
-            {
-                var price = command.Products.First(ol => ol.ProductId == p.Id).PriceSnapshot;
-                var quantity = command.Products.First(ol => ol.ProductId == p.Id).Quantity;
 
-                totalPrice += (price * quantity);
-                order.AddLine(new OrderLine(order.Id, p.Id, quantity, price));
+
+            command.Products.ForEach(product =>
+            {
+                if (productsInLines.Any(p => p.Id == product.ProductId))
+                {
+                    totalPrice += (product.PriceSnapshot * product.Quantity);
+                    order.AddLine(new OrderLine(order.Id, product.ProductId, product.Quantity, product.PriceSnapshot));
+                }
             });
+            
 
             order.SetTotalPrice(totalPrice);
 
