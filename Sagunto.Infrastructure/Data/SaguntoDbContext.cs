@@ -23,9 +23,10 @@ namespace Sagunto.Infrastructure.Data
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasIndex(u => u.SaguntinoCode).IsUnique();
+                entity.HasIndex(u => u.FirebaseUid).IsUnique();
+                entity.HasIndex(u => u.Email).IsUnique();
             });
 
-            
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(p => p.PriceMember).HasColumnType("decimal(10,2)");

@@ -6,6 +6,8 @@ namespace Sagunto.Domain.Entities
     public class User
     {
         public int Id { get; private set; }
+        public string FirebaseUid { get; private set; } = string.Empty;
+        public string Email { get; private set; } = string.Empty;
         public string Name { get; private set; } = string.Empty;
         public string? Surname { get; private set; }
         public string SaguntinoCode { get; private set; } = string.Empty;
@@ -15,8 +17,10 @@ namespace Sagunto.Domain.Entities
 
         private User() { }
 
-        public User(string name, int roleId, string saguntinoCode,string? surname) 
+        public User(string firebaseUid, string email, string name, int roleId, string saguntinoCode, string? surname)
         {
+            FirebaseUid = firebaseUid;
+            Email = email;
             Name = name;
             Surname = string.IsNullOrEmpty(surname) ? null : surname;
             SaguntinoCode = saguntinoCode;
@@ -24,13 +28,13 @@ namespace Sagunto.Domain.Entities
             UpdateNormalizedSearch();
         }
 
-        public void ChangeRole(Role newRole) 
+        public void ChangeRole(Role newRole)
         {
             ArgumentNullException.ThrowIfNull(newRole);
-
             RoleId = newRole.Id;
             Role = newRole;
         }
+
         private void UpdateNormalizedSearch()
         {
             var rawString = $"{Name} {Surname}".Trim();
