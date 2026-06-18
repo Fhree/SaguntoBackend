@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sagunto.Infrastructure.Data;
@@ -11,9 +12,11 @@ using Sagunto.Infrastructure.Data;
 namespace Sagunto.Infrastructure.Migrations
 {
     [DbContext(typeof(SaguntoDbContext))]
-    partial class SaguntoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260614151542_InitialCreateWithFirebase")]
+    partial class InitialCreateWithFirebase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,10 +158,12 @@ namespace Sagunto.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("email");
 
                     b.Property<string>("FirebaseUid")
+                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("firebase_uid");
 
@@ -182,7 +187,6 @@ namespace Sagunto.Infrastructure.Migrations
                         .HasColumnName("saguntino_code");
 
                     b.Property<string>("Surname")
-                        .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("surname");
 

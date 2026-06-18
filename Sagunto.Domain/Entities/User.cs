@@ -6,27 +6,29 @@ namespace Sagunto.Domain.Entities
     public class User
     {
         public int Id { get; private set; }
-        public string FirebaseUid { get; private set; } = string.Empty;
-        public string Email { get; private set; } = string.Empty;
-        public string Name { get; private set; } = string.Empty;
-        public string? Surname { get; private set; }
-        public string SaguntinoCode { get; private set; } = string.Empty;
+        public string? FirebaseUid { get; private set; }
+        public string? Email { get; private set; }
+        public string Name { get; private set; }
+        public string Surname { get; private set; }
+        public string SaguntinoCode { get; private set; }
         public int RoleId { get; private set; }
         public Role? Role { get; private set; }
-        public string NormalizedSearch { get; private set; } = string.Empty;
+        public string NormalizedSearch { get; private set; }
 
         private User() { }
 
-        public User(string firebaseUid, string email, string name, int roleId, string saguntinoCode, string? surname)
+        public User(string firebaseUid, string email, string name, int roleId, string saguntinoCode, string surname)
         {
             FirebaseUid = firebaseUid;
             Email = email;
             Name = name;
-            Surname = string.IsNullOrEmpty(surname) ? null : surname;
+            Surname = surname;
             SaguntinoCode = saguntinoCode;
             RoleId = roleId;
             UpdateNormalizedSearch();
         }
+
+        public User(string name, int roleId, string saguntinoCode, string surname) : this(null, null, name, roleId, saguntinoCode, surname){}
 
         public void ChangeRole(Role newRole)
         {

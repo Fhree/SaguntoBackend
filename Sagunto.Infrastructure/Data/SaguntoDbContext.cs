@@ -37,11 +37,6 @@ namespace Sagunto.Infrastructure.Data
             {
                 entity.Property(o => o.PriceSnapshot).HasColumnType("decimal(10,2)");
             });
-
-            modelBuilder.Entity<Role>().HasData(
-                new Role { Id = 1, Name = "Admin" },
-                new Role { Id = 2, Name = "Saguntino" }
-            );
         }
     }
 }
