@@ -8,17 +8,17 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Users
 {
-    public record CreateNewUserCommand(string Name, string Surname);
+    public record UserRegisterCommand(string Name, string Surname);
 
-    public record CreateNewUserResponse(int Id, string Name, string Surname, string SaguntinoCode, int RoleId);
+    public record UserRegisterResponse(int Id, string Name, string Surname, string SaguntinoCode, int RoleId);
 
-    public static class CreateNewUserCommandHandler
+    public static class UserRegisterCommandHandler
     {
         [Authorize]
-        [WolverinePost("/api/users")]
+        [WolverinePost("/api/users/register")]
         [Tags("Users")]
-        [EndpointSummary("Create new user")]
-        public static async Task<IResult> Handle(CreateNewUserCommand command, ISaguntoDbContext dbContext, ClaimsPrincipal userPrincipal, CancellationToken cancellationToken)
+        [EndpointSummary("Register user")]
+        public static async Task<IResult> Handle(UserRegisterCommand command, ISaguntoDbContext dbContext, ClaimsPrincipal userPrincipal, CancellationToken cancellationToken)
         {
             var firebaseUid = userPrincipal.FindFirstValue("user_id") ?? userPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
             var email = userPrincipal.FindFirstValue("email") ?? userPrincipal.FindFirstValue(ClaimTypes.Email);
@@ -45,7 +45,7 @@ namespace Sagunto.Application.Features.Users
             dbContext.Users.Add(user);
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            return TypedResults.Created($"/api/users", new CreateNewUserResponse(user.Id, user.Name, user.Surname, user.SaguntinoCode, user.RoleId));
+            return TypedResults.Created($"/api/users/register", new UserRegisterResponse(user.Id, user.Name, user.Surname, user.SaguntinoCode, user.RoleId));
         }
 
         private static string GenerateSaguntinoCode()

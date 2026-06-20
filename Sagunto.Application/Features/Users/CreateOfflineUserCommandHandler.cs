@@ -9,7 +9,7 @@ using Wolverine.Http;
 namespace Sagunto.Application.Features.Users
 {
     
-    public record CreateOfflineUserCommand(string Name, string Surname, int RoleId);
+    public record CreateOfflineUserCommand(string Name, string Surname);
     public record CreateOfflineUserResponse(int Id, string Name, string Surname, string SaguntinoCode, int RoleId);
 
     public static class CreateOfflineUserCommandHandler
@@ -17,7 +17,7 @@ namespace Sagunto.Application.Features.Users
         [Authorize]
         [WolverinePost("/api/admin/users")]
         [Tags("Admin")]
-        [EndpointSummary("Crea usuarios offline sin FirebaseUid (Solo Administradores)")]
+        [EndpointSummary("Create offline user")]
         public static async Task<IResult> Handle(CreateOfflineUserCommand command, ISaguntoDbContext dbContext, ClaimsPrincipal userPrincipal,CancellationToken cancellationToken)
         {
             
@@ -45,12 +45,12 @@ namespace Sagunto.Application.Features.Users
 
             } while (codeExists);
 
-            var newUser = new User(command.Name.Trim(), command.RoleId, saguntinoCode.Trim(), command.Surname.Trim());
+            var newUser = new User(command.Name.Trim(), 2, saguntinoCode.Trim(), command.Surname.Trim());
 
             dbContext.Users.Add(newUser);
             await dbContext.SaveChangesAsync(cancellationToken);
 
-            return TypedResults.Created($"/api/users/{newUser.Id}",
+            return TypedResults.Created($"/api/admin/users/{newUser.Id}",
                 new CreateOfflineUserResponse(newUser.Id, newUser.Name, newUser.Surname, newUser.SaguntinoCode, newUser.RoleId));
         }
 
