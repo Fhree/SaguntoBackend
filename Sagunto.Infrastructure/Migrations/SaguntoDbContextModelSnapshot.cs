@@ -24,12 +24,10 @@ namespace Sagunto.Infrastructure.Migrations
 
             modelBuilder.Entity("Sagunto.Domain.Entities.Order", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -44,7 +42,7 @@ namespace Sagunto.Infrastructure.Migrations
                         .HasColumnName("is_paid");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("numeric")
+                        .HasColumnType("decimal(10,2)")
                         .HasColumnName("total");
 
                     b.Property<int>("UserId")
@@ -69,8 +67,8 @@ namespace Sagunto.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("integer")
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uuid")
                         .HasColumnName("order_id");
 
                     b.Property<decimal>("PriceSnapshot")

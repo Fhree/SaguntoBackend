@@ -2,7 +2,7 @@
 {
     public class Order
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime CreatedAt { get; private set; }
         public decimal Total { get; private set; }
         public bool IsPaid { get; private set; } = false;
@@ -11,10 +11,14 @@
         public User? User { get; private set; }
         public ICollection<OrderLine> Lines { get; private set; }
 
-        private Order() { }
+        private Order(Guid id)
+        {
+            Id = id;
+        }
 
-        public Order(bool isPaid, int userId, int? customerId) 
-        { 
+        public Order(Guid id, bool isPaid, int userId, int? customerId) 
+        {
+            Id = id;
             CreatedAt = DateTime.UtcNow;
             IsPaid = isPaid;
             UserId = userId;

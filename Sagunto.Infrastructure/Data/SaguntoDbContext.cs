@@ -33,6 +33,11 @@ namespace Sagunto.Infrastructure.Data
                 entity.Property(p => p.PriceGuest).HasColumnType("decimal(10,2)");
             });
 
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.Property(o => o.Total).HasColumnType("decimal(10,2)");
+            });
+
             modelBuilder.Entity<OrderLine>(entity =>
             {
                 entity.Property(o => o.PriceSnapshot).HasColumnType("decimal(10,2)");

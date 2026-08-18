@@ -5,7 +5,7 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-    public record OrderDto(int Id, decimal Total, string Date, List<OrderLineDto> OrderLines);
+    public record OrderDto(Guid Id, decimal Total, string Date, List<OrderLineDto> OrderLines);
     public record OrderLineDto(string Name, int Quantity, decimal Price);
 
     public class GetAllOrdersWithoutPayByUserQueryHandler

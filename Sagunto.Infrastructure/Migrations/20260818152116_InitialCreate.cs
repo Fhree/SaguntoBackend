@@ -46,10 +46,13 @@ namespace Sagunto.Infrastructure.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    firebase_uid = table.Column<string>(type: "text", nullable: true),
+                    email = table.Column<string>(type: "text", nullable: true),
                     name = table.Column<string>(type: "text", nullable: false),
-                    surname = table.Column<string>(type: "text", nullable: true),
+                    surname = table.Column<string>(type: "text", nullable: false),
                     saguntino_code = table.Column<string>(type: "text", nullable: false),
-                    role_id = table.Column<int>(type: "integer", nullable: false)
+                    role_id = table.Column<int>(type: "integer", nullable: false),
+                    normalized_search = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,10 +69,9 @@ namespace Sagunto.Infrastructure.Migrations
                 name: "orders",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    total = table.Column<decimal>(type: "numeric", nullable: false),
+                    total = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
                     is_paid = table.Column<bool>(type: "boolean", nullable: false),
                     customer_id = table.Column<int>(type: "integer", nullable: true),
                     user_id = table.Column<int>(type: "integer", nullable: false)
@@ -93,7 +95,7 @@ namespace Sagunto.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     quantity = table.Column<int>(type: "integer", nullable: false),
                     price_snapshot = table.Column<decimal>(type: "numeric(10,2)", nullable: false),
-                    order_id = table.Column<int>(type: "integer", nullable: false),
+                    order_id = table.Column<Guid>(type: "uuid", nullable: false),
                     product_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
@@ -127,6 +129,18 @@ namespace Sagunto.Infrastructure.Migrations
                 name: "ix_orders_user_id",
                 table: "orders",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_email",
+                table: "users",
+                column: "email",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_firebase_uid",
+                table: "users",
+                column: "firebase_uid",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_users_role_id",

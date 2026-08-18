@@ -5,7 +5,7 @@ using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-    public record CheckoutUserCommand(int CustomerId, List<int> OrderIds);
+    public record CheckoutUserCommand(int CustomerId, List<Guid> OrderIds);
 
     public static class CheckoutUserCommandHandler
     {
