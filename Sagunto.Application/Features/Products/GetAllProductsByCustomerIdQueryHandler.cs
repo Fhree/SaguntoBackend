@@ -9,14 +9,14 @@ namespace Sagunto.Application.Features.Products
 
     public static class GetAllProductsByCustomerIdQueryHandler
     {
-        [WolverineGet("/api/products/{customerId}")]
+        [WolverineGet("/api/products/{isSaguntino}")]
         [Tags("Products")]
-        [EndpointSummary("Get all products by customer Id")]
-        public static async Task<List<ProductByCustomerIdResponse>> Handle(int customerId, ISaguntoDbContext dbContext)
+        [EndpointSummary("Get all products by type of customer")]
+        public static async Task<List<ProductByCustomerIdResponse>> Handle(bool isSaguntino, ISaguntoDbContext dbContext)
         {
             var products = new List<ProductByCustomerIdResponse>();
 
-            if (await dbContext.Users.AnyAsync(u => u.Id == customerId)) 
+            if (isSaguntino)
                 products = await dbContext.Products.AsNoTracking()
                     .Select(p => new ProductByCustomerIdResponse(p.Id, p.Name, p.PriceMember))
                     .ToListAsync();

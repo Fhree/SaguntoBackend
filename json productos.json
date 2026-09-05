@@ -1,0 +1,74 @@
+{
+  "products": [
+    {
+      "name": "Copa",
+      "priceGuest": 6.00,
+      "priceMember": 5.00
+    },
+    {
+      "name": "Copa + redbull",
+      "priceGuest": 7.00,
+      "priceMember": 6.00
+    },
+	{
+      "name": "Cañas",
+      "priceGuest": 2.00,
+      "priceMember": 1.50
+    },
+	{
+      "name": "Refrescos",
+      "priceGuest": 2.00,
+      "priceMember": 1.50
+    },
+	{
+      "name": "Agua",
+      "priceGuest": 1.00,
+      "priceMember": 1.00
+    },
+    {
+      "name": "Chupito",
+      "priceGuest": 2.00,
+      "priceMember": 2.00
+    },
+	{
+      "name": "Tinto de verano",
+      "priceGuest": 2.00,
+      "priceMember": 1.50
+    },
+	{
+      "name": "Chupito tequila de sabores",
+      "priceGuest": 1.00,
+      "priceMember": 1.00
+    },
+    {
+      "name": "Mini de cerveza",
+      "priceGuest": 3.50,
+      "priceMember": 3.00
+    },
+    {
+      "name": "Red Bull",
+      "priceGuest": 2.00,
+      "priceMember": 2.00
+    },
+    {
+      "name": "Tercio",
+      "priceGuest": 2.00,
+      "priceMember": 1.50
+    },
+    {
+      "name": "Luz de Niké",
+      "priceGuest": 1.00,
+      "priceMember": 1.00
+    },
+    {
+      "name": "Vaso festero",
+      "priceGuest": 1.00,
+      "priceMember": 1.00
+    },
+    {
+      "name": "Vaso festero + luz",
+      "priceGuest": 1.50,
+      "priceMember": 1.50
+    }
+  ]
+}
