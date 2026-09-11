@@ -58,4 +58,8 @@ app.UseAuthorization();
 
 app.MapWolverineEndpoints();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<SaguntoDbContext>();
+}
 app.Run();
