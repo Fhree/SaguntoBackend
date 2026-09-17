@@ -18,6 +18,7 @@ namespace Sagunto.Application.Features.Reports
 
             return await query
                 .OrderBy(s => s.Id)
+                .Where(s => s.Name != "admin" && s.Surname != null)
                 .Select(s => new SaguntinoDto(s.FirebaseUid, s.Name, s.Surname, s.SaguntinoCode))
                 .ToListAsync(ct);
         }
