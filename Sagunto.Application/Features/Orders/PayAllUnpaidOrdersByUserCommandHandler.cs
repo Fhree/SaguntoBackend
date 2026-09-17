@@ -1,45 +1,31 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Sagunto.Application.Interfaces;
-using System.Linq;
-using System.Threading.Tasks;
-using Wolverine.Http;
 using Microsoft.EntityFrameworkCore;
+using Sagunto.Application.Interfaces;
+using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-    public record PayOrdersRequest(List<Guid> OrderIds);
 
-    public class PayOrdersByIdsCommandHandler
+    public class PayAllOrdersCommandHandler
     {
+        // Mantenemos la ruta exacta a la que ataca tu app móvil
         [WolverinePost("/api/orders/{customerId}/payAll")]
         [Tags("Orders")]
-        [EndpointSummary("Pay specific unpaid orders for a customer")]
+        [EndpointSummary("Pay all unpaid orders for a customer")]
         public static async Task<IResult> Handle(
             int customerId,
-            PayOrdersRequest request,
             ISaguntoDbContext dbContext)
         {
-            if (request.OrderIds == null || !request.OrderIds.Any())
-            {
-                return Results.BadRequest(new
-                {
-                    Message = "Debe proporcionar al menos un identificador de pedido para liquidar."
-                });
-            }
-
-            // Filtramos solo los pedidos que pertenezcan al cliente, estén en la lista enviada y sigan impagados
+            // Buscamos todas las comandas de este saguntino que sigan impagadas
             var orders = await dbContext.Orders
-                .Where(o => o.CustomerId == customerId
-                         && request.OrderIds.Contains(o.Id)
-                         && !o.IsPaid)
+                .Where(o => o.CustomerId == customerId && !o.IsPaid)
                 .ToListAsync();
 
             if (!orders.Any())
             {
-                // Retornamos 200/Ok para garantizar idempotencia si un worker reintenta tras un timeout
                 return Results.Ok(new
                 {
-                    Message = "Los pedidos seleccionados ya han sido liquidados previamente o no existen."
+                    Message = "El saguntino no tiene deudas pendientes o ya han sido liquidadas."
                 });
             }
 
