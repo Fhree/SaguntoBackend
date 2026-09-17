@@ -53,14 +53,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapWolverineEndpoints();
 app.UseCors(policy =>
 {
     policy.AllowAnyOrigin()
           .AllowAnyMethod()
           .AllowAnyHeader();
 });
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapWolverineEndpoints();
+
 app.Run();
