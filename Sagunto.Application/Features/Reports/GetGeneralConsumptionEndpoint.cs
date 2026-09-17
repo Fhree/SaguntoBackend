@@ -30,9 +30,9 @@ namespace Sagunto.Backend.Features.Reports
         public static async Task<List<CustomerConsumptionSummaryDto>> Handle(ISaguntoDbContext db, CancellationToken ct)
         {
             return await db.Orders.AsNoTracking()
-                .GroupBy(x => new { x.CustomerId, x.Customer.Name, x.Customer.Surname })
+                .GroupBy(x => new { x.CustomerId, x.Customer.Name, x.Customer.Surname, x.IsPaid })
                 .OrderBy(g => g.Key.CustomerId)
-                .Where(g => g.Key.CustomerId.HasValue && g.Key.CustomerId > 0)
+                .Where(g => g.Key.CustomerId.HasValue && g.Key.CustomerId > 0 && !g.Key.IsPaid)
                 .Select(g => new CustomerConsumptionSummaryDto(
                     g.Key.CustomerId.Value,
                     g.Key.Name,
