@@ -1,33 +1,22 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Sagunto.Application.Interfaces;
-using System.Linq;
-using System.Threading.Tasks;
-using Wolverine.Http;
 using Microsoft.EntityFrameworkCore;
+using Sagunto.Application.Interfaces;
+using Wolverine.Http;
 
 namespace Sagunto.Application.Features.Orders
 {
-    public record PayOrdersRequest(List<Guid> OrderIds);
+    public record PayAllUnpaidOrdersByUserRequest(List<Guid> OrderIds);
 
-    public class PayOrdersByIdsCommandHandler
+    public class PayAllUnpaidOrdersByUserCommandHandler
     {
         [WolverinePost("/api/orders/{customerId}/payAll")]
         [Tags("Orders")]
         [EndpointSummary("Pay specific unpaid orders for a customer")]
-        public static async Task<IResult> Handle(
-            int customerId,
-            PayOrdersRequest request,
-            ISaguntoDbContext dbContext)
+        public static async Task<IResult> Handle(int customerId, PayAllUnpaidOrdersByUserRequest request, ISaguntoDbContext dbContext)
         {
             if (request.OrderIds == null || !request.OrderIds.Any())
-            {
-                return Results.BadRequest(new
-                {
-                    Message = "Debe proporcionar al menos un identificador de pedido para liquidar."
-                });
-            }
+                return Results.BadRequest(new { Message = "No se indicaron pedidos para liquidar." });
 
-            // Filtramos solo los pedidos que pertenezcan al cliente, estén en la lista enviada y sigan impagados
             var orders = await dbContext.Orders
                 .Where(o => o.CustomerId == customerId
                          && request.OrderIds.Contains(o.Id)
@@ -35,21 +24,14 @@ namespace Sagunto.Application.Features.Orders
                 .ToListAsync();
 
             if (!orders.Any())
-            {
-                // Retornamos 200/Ok para garantizar idempotencia si un worker reintenta tras un timeout
-                return Results.Ok(new
-                {
-                    Message = "Los pedidos seleccionados ya han sido liquidados previamente o no existen."
-                });
-            }
+                return Results.Ok(new { Message = "No hay consumiciones pendientes de las solicitadas." });
 
-            orders.ForEach(order => order.Pay());
+            orders.ForEach(o => o.Pay());
             await dbContext.SaveChangesAsync();
 
             return Results.Ok(new
             {
-                Message = $"{orders.Count} consumición(es) liquidada(s) correctamente.",
-                SettledOrderIds = orders.Select(o => o.Id).ToList()
+                Message = $"{orders.Count} consumición(es) liquidada(s) correctamente."
             });
         }
     }

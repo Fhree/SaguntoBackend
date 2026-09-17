@@ -42,7 +42,7 @@ builder.Host.UseWolverine(opts =>
 
 builder.Services.AddWolverineHttp();
 builder.Services.AddOpenApi();
-
+builder.Services.AddCors();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -57,5 +57,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapWolverineEndpoints();
-
+app.UseCors(policy =>
+{
+    policy.AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader();
+});
 app.Run();
