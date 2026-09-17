@@ -9,9 +9,11 @@ public record OrderKpisDto(
     decimal TotalPendingDebt,
     decimal TotalImmediatePayments,
     decimal TotalGuests,
+    decimal TotalAbsolute,
     int PendingDebtCount,
     int ImmediatePaymentsCount,
-    int GuestsCount
+    int GuestsCount,
+    int TotalOrdersCount
 );
 
 public static class GetOrderKpisEndpoint
@@ -52,13 +54,21 @@ public static class GetOrderKpisEndpoint
             })
             .FirstOrDefaultAsync(ct);
 
+        // 4. Consumo total absoluto (suma de todos los pedidos)
+        var totalAbsolute = await db.Orders.SumAsync(o => o.Total, ct);
+
+        // 5. Total de pedidos (suma de todos los pedidos)
+        var totalOrdersCount = await db.Orders.CountAsync(ct);
+
         return new OrderKpisDto(
             totalPendingDebt,
             barOrdersInfo?.Total ?? 0,
             guestOrdersInfo?.Total ?? 0,
+            totalAbsolute,
             pendingDebtCount,
             barOrdersInfo?.Count ?? 0,
-            guestOrdersInfo?.Count ?? 0
+            guestOrdersInfo?.Count ?? 0,
+            totalOrdersCount
         );
     }
 }

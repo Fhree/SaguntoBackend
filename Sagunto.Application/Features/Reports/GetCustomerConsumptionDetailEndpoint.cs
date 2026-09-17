@@ -31,7 +31,8 @@ namespace Sagunto.Backend.Features.Reports
                         combined.o.IsPaid,
                         p.Name,
                         combined.ol.Quantity,
-                        combined.ol.PriceSnapshot
+                        combined.ol.PriceSnapshot,
+                        combined.o.CreatedAt.Date
                     )
                 )
                 .ToListAsync(ct);

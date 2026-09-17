@@ -9,6 +9,7 @@
         public int? CustomerId { get; private set; }
         public int UserId { get; private set; }
         public User? User { get; private set; }
+        public User? Customer { get; private set; }
         public ICollection<OrderLine> Lines { get; private set; }
 
         private Order(Guid id)
