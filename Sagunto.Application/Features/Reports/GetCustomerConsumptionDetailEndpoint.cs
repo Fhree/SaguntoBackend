@@ -14,7 +14,7 @@ namespace Sagunto.Backend.Features.Reports
         public static async Task<List<CustomerOrderDetailDto>> Handle(int customerId, ISaguntoDbContext db, CancellationToken ct)
         {
             return await db.Orders
-                .Where(o => o.CustomerId == customerId)
+                .Where(o => o.CustomerId == customerId && !o.IsPaid)
                 .Join(
                     db.OrderLines,
                     o => o.Id,

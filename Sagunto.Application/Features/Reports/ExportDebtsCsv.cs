@@ -16,8 +16,8 @@ namespace Sagunto.Backend.Features.Reports
         public static async Task<IResult> Handle(ISaguntoDbContext db, CancellationToken ct)
         {
             var consumptions = await db.Orders
-            .Where(o => o.User != null)
-            .GroupBy(o => new { o.User.Id, o.User.Name, o.User.Surname })
+            .Where(o => o.Customer != null && o.Customer.Id > 0 && !o.IsPaid)
+            .GroupBy(o => new { o.Customer.Id, o.Customer.Name, o.Customer.Surname })
             .Select(g => new
             {
                 CustomerId = g.Key.Id,
